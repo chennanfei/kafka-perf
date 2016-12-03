@@ -28,13 +28,12 @@ def send_message(msg):
     except Exception as ex:
         print 'Failed to deliver message. Error: {} - {}'.format(type(ex), ex.message)
 
-    time.sleep(0.05)
-
 
 def multiple_run():
     def callback():
         cnt = 0
         while cnt < MAX_MESSAGE_NUM:
+            time.sleep(0.05)
             cnt += 1
 
             nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
