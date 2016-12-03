@@ -13,4 +13,4 @@ RUN apt-get install -y python2.7-dev software-properties-common wget \
 
 ADD kafka_perf.py /kafka_perf.py
 
-CMD ["/kafka_perf.py"]
+CMD ["python", "/kafka_perf.py"]

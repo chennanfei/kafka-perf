@@ -8,13 +8,16 @@ from confluent_kafka import Producer
 KAFKA_MESSAGE_TOPIC = os.getenv('KAFKA_MESSAGE_TOPIC')
 KAFKA_SERVERS = os.getenv('KAFKA_SERVERS')
 THREAD_NUM = int(os.getenv('THREAD_NUM', 10))
+MAX_MESSAGE_NUM = int(os.getenv('MAX_MESSAGE_NUM', 100))
 
 
 def deliver_callback(err, msg):
+    nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     if err:
-        print 'Failed to deliver message to kafka. Error: %s' % err
+        print '[%s] Failed to deliver message to kafka. Error: %s' % (nw, err)
     else:
-        print 'Succeeded to deliver message to %s [%d]' % (msg.topic(), msg.partition())
+        print '[%s] Succeeded to deliver message to %s [%d]' % (nw, msg.topic(), msg.partition())
 
 
 def send_message(msg):
@@ -30,9 +33,13 @@ def send_message(msg):
 
 def multiple_run():
     def callback():
-        nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        msg = 'A new message is going to be send at %s' % nw
-        send_message(msg)
+        cnt = 0
+        while cnt < MAX_MESSAGE_NUM:
+            cnt += 1
+
+            nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            msg = 'A new message %d is going to be sent at %s' % (cnt, nw)
+            send_message(msg)
 
     count = 0
     while count < THREAD_NUM:
@@ -42,5 +49,4 @@ def multiple_run():
         count += 1
 
 
-if __name__ == 'main':
-    multiple_run()
+multiple_run()
