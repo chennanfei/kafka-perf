@@ -61,7 +61,9 @@ def multiple_run():
             cnt += 1
 
             nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            msg = 'Thread %d sent a new message [%d] %s at %s' % (thread_num, cnt, file_content, nw)
+            msg = 'New message %s was sent by thread %d - %d at %s' % (
+                file_content, thread_num, cnt, nw
+            )
             send_message(msg)
 
         thread_count += 1
