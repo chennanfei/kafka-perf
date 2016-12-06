@@ -13,14 +13,22 @@ MAX_MESSAGE_NUM = int(os.getenv('MAX_MESSAGE_NUM', 100))
 thread_count = 0
 
 
+def read_file():
+    file_handler = open('test.log', 'r')
+    try:
+        return file_handler.read()
+    finally:
+        file_handler.close()
+
+
 def deliver_callback(err, msg):
     nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     if err:
         print '[%s] Failed to deliver message to kafka. Error: %s' % (nw, err)
     else:
-        print '[%s] Succeeded to deliver message \"%s\" to %s [%d]' % (
-            nw, msg.value(), msg.topic(), msg.partition()
+        print '[%s] Succeeded to deliver message to %s [%d]' % (
+            nw, msg.topic(), msg.partition()
         )
 
 
@@ -34,6 +42,7 @@ def send_message(msg):
 
 
 def multiple_run():
+    file_content = read_file()
     start_time = datetime.now()
 
     def callback(thread_num):
@@ -45,10 +54,8 @@ def multiple_run():
             cnt += 1
 
             nw = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            msg = 'Thread %d sent a new message %d at %s' % (thread_num, cnt, nw)
+            msg = 'Thread %d sent a new message [%d] %s at %s' % (thread_num, cnt, file_content, nw)
             send_message(msg)
-
-            print 'Message: %s' % msg
 
         thread_count += 1
 
