@@ -11,6 +11,8 @@ RUN apt-get install -y python2.7-dev software-properties-common wget \
     && apt-get install -y librdkafka-dev \
     && pip install confluent-kafka
 
-ADD kafka_perf.py /kafka_perf.py
+RUN mkdir /perf-test
+WORKDIR /perf-test
+CMD ["python", "kafka_perf.py"]
 
-CMD ["python", "/kafka_perf.py"]
+ADD . /perf-test
