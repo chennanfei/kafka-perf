@@ -23,6 +23,7 @@ def read_file():
         while cnt < FILE_LOOP_SIZE:
             cnt += 1
             content += file_content
+        return content
     finally:
         file_handler.close()
 
