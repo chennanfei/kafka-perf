@@ -5,7 +5,7 @@ from threading import Thread
 from confluent_kafka import Producer
 
 
-FILE_LOOP_SIZE = int(os.getenv('FILE_LOOP_SIZE', 1))
+FILE_LOOP_SIZE = int(os.getenv('FILE_LOOP_SIZE', 3))
 KAFKA_MESSAGE_TOPIC = os.getenv('KAFKA_MESSAGE_TOPIC')
 KAFKA_SERVERS = os.getenv('KAFKA_SERVERS')
 THREAD_NUM = int(os.getenv('THREAD_NUM', 2))
@@ -17,11 +17,12 @@ thread_count = 0
 def read_file():
     file_handler = open('test.log', 'r')
     try:
-        content = file_handler.read()
+        file_content = file_handler.read()
         cnt = 0
+        content = ''
         while cnt < FILE_LOOP_SIZE:
             cnt += 1
-            content += content
+            content += file_content
     finally:
         file_handler.close()
 
